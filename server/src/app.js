@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const createError = require("http-errors");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
+const userRouter = require("./routers/userRouter");
 
 const app = express();
 
@@ -36,9 +37,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("Welcome to server");
 });
-app.get("/api/user", (req, res) => {
-  res.status(200).send("User return");
-});
+
+// users routers
+app.use("/api/users", userRouter);
 
 // client error handling
 app.use((req, res, next) => {
