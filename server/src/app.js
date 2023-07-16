@@ -6,6 +6,8 @@ const createError = require("http-errors");
 const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const userRouter = require("./routers/userRouter");
+const { seedUser } = require("./controllers/seedController");
+const seedRouter = require("./routers/seedRouter");
 const app = express();
 
 const rateLimiter = rateLimit({
@@ -18,20 +20,8 @@ app.use(rateLimiter);
 app.use(xssClean());
 app.use(cors());
 app.use(morgan("dev"));
-
-// express built-in middleware for working json data as req body
-//app.use(express.json());
-// express built-in middleware for working from data
-///app.use(express.urlencoded({ extended: true }));
-
-// third party middleware alt for upper to middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// const isLoggedIn = (req, res, next) => {
-//   console.log("isLoggedIn middleware");
-//   next();
-// };
 
 app.get("/", (req, res) => {
   res.send("Welcome to server");
@@ -39,14 +29,10 @@ app.get("/", (req, res) => {
 
 // users routers
 app.use("/api/users", userRouter);
+app.use("/api/seed", seedRouter);
 
 // client error handling
 app.use((req, res, next) => {
-  // res.status(404).json({ message: "Route not found" });
-
-  //   createError(404, "Route not found !!!");
-  //   next();
-
   next(createError(404, "Route not found !!!"));
 });
 

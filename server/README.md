@@ -16,3 +16,4 @@
 12. MVC Architecture setup
 13. Connect MONGODB Database -> mongoose
 14. Schema & model for User -> validation, bcrypt
+15. Create seed route for testing
