@@ -17,3 +17,5 @@
 13. Connect MONGODB Database -> mongoose
 14. Schema & model for User -> validation, bcrypt
 15. Create seed route for testing
+16. GET /api/users -> isAdmin -> getAllUsers -> searchByName + pagination functionality
+17. responseHandler controller for error or success
