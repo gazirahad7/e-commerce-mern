@@ -21,3 +21,4 @@
 17. responseHandler controller for error or success
 18. GET /api/users/:id -> get a single user by id
 19. How to create services in the backend
+20. DELETE /api/users/:id -> delete a single user by id

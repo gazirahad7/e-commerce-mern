@@ -8,7 +8,7 @@ const rateLimit = require("express-rate-limit");
 const userRouter = require("./routers/userRouter");
 const { seedUser } = require("./controllers/seedController");
 const seedRouter = require("./routers/seedRouter");
-const { errorResponse } = require("./controllers/resppnseController");
+const { errorResponse } = require("./controllers/responseController");
 const app = express();
 
 const rateLimiter = rateLimit({
