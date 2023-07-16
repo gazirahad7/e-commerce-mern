@@ -2,7 +2,7 @@ const createError = require("http-errors");
 const User = require("../models/userModel");
 const { successResponse } = require("./resppnseController");
 const { default: mongoose } = require("mongoose");
-const { findUser } = require("../services/findUser");
+const { findWithId } = require("../services/findItem");
 const getUsers = async (req, res, next) => {
   try {
     const search = req.query.search || "";
@@ -48,8 +48,9 @@ const getUsers = async (req, res, next) => {
 const getUser = async (req, res, next) => {
   try {
     const id = req.params.id;
+    const options = { password: 0 };
 
-    const user = await findUser(id);
+    const user = await findWithId(id, options);
     return successResponse(res, {
       statusCode: 200,
       message: "user returned successfully ",
