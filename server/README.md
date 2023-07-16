@@ -13,6 +13,6 @@
 9. How to handle HTTP errors () -> http-errors
 10. How to secure API -> xss-clean, express-rate-limit
 11. Environment variable & .gitignore
-12. MVC Architecture
+12. MVC Architecture setup
 13. Connect MONGODB Database -> mongoose
 14. Schema & model for User -> validation, bcrypt
