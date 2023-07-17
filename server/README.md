@@ -23,4 +23,5 @@
 19. How to create services in the backend
 20. DELETE /api/users/:id -> delete a single user by id
 21. Refactoring & reusability, dynamic
-22. PUT /api/users/:id -> update a single user by id
+22. Delete image helper
+23. PUT /api/users/:id -> update a single user by id
