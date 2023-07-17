@@ -32,4 +32,5 @@
 28. Add multer middleware for file upload
 29. File size & type filtering
 30. Refactoring file uploading
-31. PUT /api/users/:id -> update a single user by id
+31. Input validation -> express-validator
+32. PUT /api/users/:id -> update a single user by id

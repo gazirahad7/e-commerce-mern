@@ -8,6 +8,7 @@ const { createJsonWebToken } = require("../helper/jsonwebtoken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const emailWithNodeMailer = require("../helper/email");
 const jwt = require("jsonwebtoken");
+
 const getUsers = async (req, res, next) => {
   try {
     const search = req.query.search || "";
@@ -50,6 +51,7 @@ const getUsers = async (req, res, next) => {
     next(error);
   }
 };
+
 const getUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -65,6 +67,7 @@ const getUserById = async (req, res, next) => {
     next(error);
   }
 };
+
 const deleteUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -82,12 +85,11 @@ const deleteUserById = async (req, res, next) => {
     next(error);
   }
 };
+
 const processRegister = async (req, res, next) => {
   try {
     const { name, email, password, phone, address } = req.body;
-
     console.log(req.body);
-
     const userExists = await User.exists({ email: email });
     if (userExists) {
       throw createError(
