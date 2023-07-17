@@ -27,5 +27,6 @@
 23. POST /api/users/process-register -> process the registration
 24. Create JWT
 25. Setup smtp server & prepare email
-26. POST /api/users/verify -> verify + register into database
-27. PUT /api/users/:id -> update a single user by id
+26. send email with nodemailer
+27. POST /api/users/verify -> verify + register into database
+28. PUT /api/users/:id -> update a single user by id
