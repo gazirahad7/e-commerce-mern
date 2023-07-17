@@ -1,12 +1,11 @@
 const multer = require("multer");
-const { uploadDir } = require("../secret");
 const path = require("path");
 
-const UPLOAD_DIR = uploadDir;
+const uploadDir = process.env.UPLOAD_FILE || "public/images/users";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, UPLOAD_DIR);
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     const extname = path.extname(file.originalname);
