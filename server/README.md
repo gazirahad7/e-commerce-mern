@@ -32,5 +32,6 @@
 28. Add multer middleware for file upload
 29. File size & type filtering
 30. Refactoring file uploading
-31. Input validation -> express-validator
-32. PUT /api/users/:id -> update a single user by id
+31. Add express validator middleware -> express-validator
+32. Should we store image as string or buffer
+33. PUT /api/users/:id -> update a single user by id
