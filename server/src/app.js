@@ -18,7 +18,7 @@ const rateLimiter = rateLimit({
 });
 
 app.use(rateLimiter);
-app.use(xssClean());
+//app.use(xssClean());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
