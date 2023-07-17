@@ -30,4 +30,5 @@
 26. send email with nodemailer
 27. POST /api/users/verify -> verify + register into database
 28. Add multer middleware for file upload
-29. PUT /api/users/:id -> update a single user by id
+29. File size & type filtering
+30. PUT /api/users/:id -> update a single user by id
