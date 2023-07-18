@@ -35,3 +35,5 @@
 31. Add express validator middleware -> express-validator
 32. Should we store image as string or buffer
 33. PUT /api/users/:id -> update a single user by id
+34. User login using JWT
+35. Authentication & authorization

@@ -9,6 +9,7 @@ const jwtActivationKey = process.env.JWT_ACTIVATION_KEY || "cat";
 const smtpUserName = process.env.SMTP_USERNAME || "";
 const smtpPassword = process.env.SMTP_PASSWORD || "";
 const clientURL = process.env.CLIENT_URL || "";
+const jwtAccessKey = process.env.JWT_ACCESS_KEY || "DOG";
 
 module.exports = {
   serverPort,
@@ -18,4 +19,5 @@ module.exports = {
   smtpUserName,
   smtpPassword,
   clientURL,
+  jwtAccessKey,
 };
