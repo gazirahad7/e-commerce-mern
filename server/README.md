@@ -38,5 +38,6 @@
 34. User login using JWT
 35. User logout
 36. Middlewares -> isLoggedIn, isLoggedOut, isAdmin
-37. GET /api/auth/refresh -> refresh the token
-38. Authentication & authorization
+37. Input validation when signed in and refactoring
+38. GET /api/auth/refresh -> refresh the token
+39. Authentication & authorization

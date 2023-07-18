@@ -42,6 +42,9 @@ const handleLogin = async (req, res, next) => {
       phone: user.phone,
       isAdmin: user.isAdmin,
     };
+    const userWithoutPassword = await User.findOne({ email }).select(
+      "-password"
+    );
 
     const accessToken = createJsonWebToken({ userInfo }, jwtAccessKey, "15m");
 
@@ -57,7 +60,7 @@ const handleLogin = async (req, res, next) => {
     return successResponse(res, {
       statusCode: 200,
       message: "User logged in successfully  ",
-      payload: { user },
+      payload: { userWithoutPassword },
     });
   } catch (error) {
     next(error);
