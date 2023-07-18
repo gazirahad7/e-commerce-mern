@@ -61,7 +61,7 @@ const handleLogin = async (req, res, next) => {
 };
 const handleLogout = async (req, res, next) => {
   try {
-    res.clearCookie("access_token");
+    res.clearCookie("accessToken");
 
     //TODO: success response
 

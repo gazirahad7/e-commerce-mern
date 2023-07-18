@@ -27,5 +27,17 @@ const isLoggedIn = async (req, res, next) => {
     return next(error);
   }
 };
+const isLoggedOut = async (req, res, next) => {
+  try {
+    const accessToken = req.cookies.accessToken;
 
-module.exports = { isLoggedIn };
+    if (accessToken) {
+      throw createError(400, "User is already loggedIn ");
+    }
+    next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { isLoggedIn, isLoggedOut };
