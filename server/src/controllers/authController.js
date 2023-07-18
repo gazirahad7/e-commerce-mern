@@ -35,11 +35,15 @@ const handleLogin = async (req, res, next) => {
     }
     //TODO: token , cookie
 
-    const accessToken = createJsonWebToken(
-      { _id: user._id },
-      jwtAccessKey,
-      "10m"
-    );
+    const userInfo = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      isAdmin: user.isAdmin,
+    };
+
+    const accessToken = createJsonWebToken({ userInfo }, jwtAccessKey, "15m");
 
     res.cookie("accessToken", accessToken, {
       maxAge: 15 * 60 * 1000,
@@ -53,7 +57,7 @@ const handleLogin = async (req, res, next) => {
     return successResponse(res, {
       statusCode: 200,
       message: "User logged in successfully  ",
-      payload: {},
+      payload: { user },
     });
   } catch (error) {
     next(error);
