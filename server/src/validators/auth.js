@@ -98,6 +98,15 @@ const validateUserPasswordUpdate = [
     return true;
   }),
 ];
+
+const validateUserForgetPassword = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required. Enter your email address")
+    .isEmail()
+    .withMessage("Invalid email address"),
+];
 // sign in validation
 
 module.exports = {
@@ -105,4 +114,5 @@ module.exports = {
   validateUserLogin,
   validateUserPasswordUpdate,
   validateUserPasswordUpdate,
+  validateUserForgetPassword,
 };

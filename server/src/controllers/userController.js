@@ -5,7 +5,11 @@ const { successResponse } = require("./responseController");
 const { findWithId } = require("../services/findItem");
 const { deleteImage } = require("../helper/deleteImage");
 const { createJsonWebToken } = require("../helper/jsonwebtoken");
-const { jwtActivationKey, clientURL } = require("../secret");
+const {
+  jwtActivationKey,
+  clientURL,
+  jwtResetPasswordKey,
+} = require("../secret");
 const emailWithNodeMailer = require("../helper/email");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
@@ -309,6 +313,7 @@ const handleUnbanUserById = async (req, res, next) => {
     next(error);
   }
 };
+
 const handleUpdatePassword = async (req, res, next) => {
   try {
     const { email, oldPassword, newPassword, confirmedPassword } = req.body;
@@ -346,6 +351,48 @@ const handleUpdatePassword = async (req, res, next) => {
   }
 };
 
+const handleForgetPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const userData = await User.findOne({ email: email });
+    if (!userData) {
+      throw createError(
+        404,
+        "Email is incorrect or your have not verified your email address. Please register yourself first"
+      );
+    }
+
+    // create jwt
+    const token = createJsonWebToken({ email }, jwtResetPasswordKey, "15m");
+
+    // prepare email
+
+    const emailData = {
+      email,
+      subject: "Reset Password",
+      html: `
+       <h2> Hello ${userData.name} ! </h2>
+       <p>Please click here to  <a href="${clientURL}/api/users/reset-password/${token}" target="_blank"> Reset your password </a> </p>
+      `,
+    };
+    // send email with nodemailer
+
+    try {
+      await emailWithNodeMailer(emailData);
+    } catch (emailError) {
+      next(createError(500, "Failed to send reset password email"));
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: `Please go to your ${email} for resting  the password`,
+      payload: { token },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   processRegister,
   activateUserAccount,
@@ -356,4 +403,5 @@ module.exports = {
   handleBanUserById,
   handleUnbanUserById,
   handleUpdatePassword,
+  handleForgetPassword,
 };
