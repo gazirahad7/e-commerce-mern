@@ -8,6 +8,7 @@ const { createJsonWebToken } = require("../helper/jsonwebtoken");
 const { jwtActivationKey, clientURL } = require("../secret");
 const emailWithNodeMailer = require("../helper/email");
 const jwt = require("jsonwebtoken");
+const bcryptjs = require("bcryptjs");
 
 const getUsers = async (req, res, next) => {
   try {
@@ -308,6 +309,42 @@ const handleUnbanUserById = async (req, res, next) => {
     next(error);
   }
 };
+const handleUpdatePassword = async (req, res, next) => {
+  try {
+    const { email, oldPassword, newPassword, confirmedPassword } = req.body;
+    const userId = req.params.id;
+    const user = await findWithId(User, userId);
+
+    //TODO: compare the password
+
+    const isPasswordMatch = await bcryptjs.compare(oldPassword, user.password);
+
+    if (!isPasswordMatch) {
+      throw createError(401, "old password  did not correct");
+    }
+
+    // const filter = { userId };
+    // const update = { $set: { password: newPassword } };
+    // const updateOptions = { new: true };
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { password: newPassword },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw createError(400, "User  password   not updated successfully");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "user  password  updated successfully ",
+      payload: { updatedUser },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   processRegister,
@@ -318,4 +355,5 @@ module.exports = {
   updateUserById,
   handleBanUserById,
   handleUnbanUserById,
+  handleUpdatePassword,
 };

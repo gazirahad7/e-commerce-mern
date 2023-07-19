@@ -43,5 +43,6 @@
 39. Input validation when signed in and refactoring
 40. PUT /api/users/ban-user -> ban user
 41. PUT /api/users/unban-user -> unban user
-42. GET /api/auth/refresh -> refresh the token
-43. Authentication & authorization
+42. PUT /api/users/update-password -> update the password
+43. GET /api/auth/refresh -> refresh the token
+44. Authentication & authorization

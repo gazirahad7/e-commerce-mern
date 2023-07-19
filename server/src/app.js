@@ -14,7 +14,7 @@ const app = express();
 
 const rateLimiter = rateLimit({
   windowMS: 1 * 60 * 1000,
-  max: 5,
+  max: 10,
   message: "T00 many request from this API, please try again later",
 });
 
