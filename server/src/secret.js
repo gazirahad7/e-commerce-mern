@@ -11,6 +11,7 @@ const smtpPassword = process.env.SMTP_PASSWORD || "";
 const clientURL = process.env.CLIENT_URL || "";
 const jwtAccessKey = process.env.JWT_ACCESS_KEY || "DOG";
 const jwtResetPasswordKey = process.env.JWT_RESET_PASSWORD || "EGG";
+const jwtRefreshKey = process.env.JWT_REFRESH_KEY || "KEY";
 
 module.exports = {
   serverPort,
@@ -22,4 +23,5 @@ module.exports = {
   clientURL,
   jwtAccessKey,
   jwtResetPasswordKey,
+  jwtRefreshKey,
 };

@@ -122,6 +122,9 @@ const validateUserResetPassword = [
       "new Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character."
     ),
 ];
+const validateUserRefreshToken = [
+  body("token").trim().notEmpty().withMessage("Refresh token  is missing"),
+];
 // sign in validation
 
 module.exports = {
@@ -131,4 +134,5 @@ module.exports = {
   validateUserPasswordUpdate,
   validateUserForgetPassword,
   validateUserResetPassword,
+  validateUserRefreshToken,
 };

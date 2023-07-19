@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 const bcryptjs = require("bcryptjs");
 const { successResponse } = require("./responseController");
 const { createJsonWebToken } = require("../helper/jsonwebtoken");
-const { jwtAccessKey } = require("../secret");
+const { jwtAccessKey, jwtRefreshKey } = require("../secret");
 
 const handleLogin = async (req, res, next) => {
   try {
@@ -46,10 +46,20 @@ const handleLogin = async (req, res, next) => {
       "-password"
     );
 
-    const accessToken = createJsonWebToken({ userInfo }, jwtAccessKey, "15m");
+    // access token
 
+    const accessToken = createJsonWebToken({ userInfo }, jwtAccessKey, "15m");
     res.cookie("accessToken", accessToken, {
       maxAge: 15 * 60 * 1000,
+      httpOnly: true,
+      // secure: true,
+      sameSite: "none",
+    });
+
+    // refresh token
+    const refreshToken = createJsonWebToken({ userInfo }, jwtRefreshKey, "7d");
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       // secure: true,
       sameSite: "none",
@@ -81,5 +91,57 @@ const handleLogout = async (req, res, next) => {
     next(error);
   }
 };
+const handleRefreshToken = async (req, res, next) => {
+  try {
+    const oldRefreshToken = req.cookies.refreshToken;
 
-module.exports = { handleLogin, handleLogout };
+    const decodedToken = jwt.verify(oldRefreshToken, jwtRefreshKey);
+
+    if (!decodedToken) {
+      throw createError(400, "Invalid refresh token, Please login again");
+    }
+
+    // create token
+    const accessToken = createJsonWebToken(
+      decodedToken.userInfo,
+      jwtAccessKey,
+      "15m"
+    );
+    res.cookie("accessToken", accessToken, {
+      maxAge: 15 * 60 * 1000,
+      httpOnly: true,
+      // secure: true,
+      sameSite: "none",
+    });
+    return successResponse(res, {
+      statusCode: 200,
+      message: "New access token is generated  ",
+      payload: {},
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const handleProtectedRoute = async (req, res, next) => {
+  try {
+    const accessToken = req.cookies.accessToken;
+    const decodedToken = jwt.verify(accessToken, jwtAccessKey);
+    if (!decodedToken) {
+      throw createError(401, "Invalid access token, Please login again");
+    }
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Protected resources accessed successfully",
+      payload: {},
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  handleLogin,
+  handleLogout,
+  handleRefreshToken,
+  handleProtectedRoute,
+};
