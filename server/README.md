@@ -45,5 +45,6 @@
 41. PUT /api/users/unban-user -> unban user
 42. PUT /api/users/update-password -> update the password
 43. Forget password
-44. GET /api/auth/refresh -> refresh the token
-45. Authentication & authorization
+44. Reset password
+45. GET /api/auth/refresh -> refresh the token
+46. Authentication & authorization
