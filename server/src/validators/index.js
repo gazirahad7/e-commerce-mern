@@ -8,7 +8,7 @@ const runValidation = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      console.log(errors.array()[0].msg);
+      console.log("====> From runValidation ", errors.array()[0].msg);
 
       return errorResponse(res, {
         statusCode: 422,

@@ -252,6 +252,62 @@ const updateUserById = async (req, res, next) => {
     next(error);
   }
 };
+const handleBanUserById = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    await findWithId(User, userId);
+
+    const updates = { isBanned: true };
+
+    const updateOptions = { new: true, runValidators: true, context: "query" };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updates,
+      updateOptions
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw createError(404, "User  was not banned successfully ");
+    }
+    //
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "user  was banned successfully ",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const handleUnbanUserById = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    await findWithId(User, userId);
+
+    const updates = { isBanned: false };
+
+    const updateOptions = { new: true, runValidators: true, context: "query" };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      updates,
+      updateOptions
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw createError(404, "User  was not unbanned successfully ");
+    }
+    //
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "user  was unbanned successfully ",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   processRegister,
@@ -260,4 +316,6 @@ module.exports = {
   getUserById,
   deleteUserById,
   updateUserById,
+  handleBanUserById,
+  handleUnbanUserById,
 };
