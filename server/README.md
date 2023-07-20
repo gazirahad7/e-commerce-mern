@@ -38,13 +38,14 @@
 34. User login using JWT
 35. User logout
 36. Middlewares -> isLoggedIn, isLoggedOut, isAdmin
-37. Middleware -> isLoggedOut
-38. Middleware -> isAdmin
-39. Input validation when signed in and refactoring
-40. PUT /api/users/ban-user -> ban user
-41. PUT /api/users/unban-user -> unban user
-42. PUT /api/users/update-password -> update the password
-43. Forget password
-44. Reset password
-45. GET /api/auth/refresh -> refresh the token
-46. Authentication & authorization
+37. Middleware -> isLoggedOut, isAdmin
+38. Input validation when signed in and refactoring
+39. PUT /api/users/ban-user -> ban user
+40. PUT /api/users/unban-user -> unban user
+41. PUT /api/users/update-password -> update the password
+42. Forget password
+43. Reset password
+44. GET /api/auth/refresh -> refresh the token & protected route
+45. Refactoring controllers and routes
+46.
+47.

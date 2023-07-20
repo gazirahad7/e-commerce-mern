@@ -42,9 +42,11 @@ const handleLogin = async (req, res, next) => {
       phone: user.phone,
       isAdmin: user.isAdmin,
     };
-    const userWithoutPassword = await User.findOne({ email }).select(
-      "-password"
-    );
+    // const userWithoutPassword = await User.findOne({ email }).select(
+    //   "-password"
+    // );
+    const userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
 
     // access token
 
@@ -79,6 +81,7 @@ const handleLogin = async (req, res, next) => {
 const handleLogout = async (req, res, next) => {
   try {
     res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
     //TODO: success response
 

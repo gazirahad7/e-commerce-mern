@@ -14,7 +14,7 @@ const emailWithNodeMailer = require("../helper/email");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 
-const getUsers = async (req, res, next) => {
+const handleGetUsers = async (req, res, next) => {
   try {
     const search = req.query.search || "";
     const page = Number(req.query.page) || 1;
@@ -37,7 +37,7 @@ const getUsers = async (req, res, next) => {
 
     const count = await User.find(filter).countDocuments();
 
-    if (!users) throw createError(404, "no users found");
+    if (!users || users.length === 0) throw createError(404, "no users found");
 
     return successResponse(res, {
       statusCode: 200,
@@ -57,7 +57,7 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-const getUserById = async (req, res, next) => {
+const handleGetUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
 
@@ -76,15 +76,18 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-const deleteUserById = async (req, res, next) => {
+const handleDeleteUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
     const options = { password: 0 };
-    const user = await findWithId(User, id, options);
-    const userImagePath = user.image;
-    await deleteImage(userImagePath);
-    await User.findByIdAndDelete({ _id: id, isAdmin: false });
 
+    // is image path in local server
+    // const user = await findWithId(User, id, options);
+    // const userImagePath = user.image;
+    // await deleteImage(userImagePath);
+
+    await findWithId(User, id, options);
+    await User.findByIdAndDelete({ _id: id, isAdmin: false });
     return successResponse(res, {
       statusCode: 200,
       message: "user were deleted successfully ",
@@ -94,11 +97,9 @@ const deleteUserById = async (req, res, next) => {
   }
 };
 
-const processRegister = async (req, res, next) => {
+const handleProcessRegister = async (req, res, next) => {
   try {
     const { name, email, password, phone, address } = req.body;
-    console.log(req.body);
-
     const image = req.file;
 
     if (!image) {
@@ -148,16 +149,14 @@ const processRegister = async (req, res, next) => {
     return successResponse(res, {
       statusCode: 200,
       message: `Please go to your ${email} for completing your registration process`,
-      payload: { token },
     });
   } catch (error) {
     next(error);
   }
 };
-const activateUserAccount = async (req, res, next) => {
+const handleActivateUserAccount = async (req, res, next) => {
   try {
     const { token } = req.body;
-
     if (!token) throw createError(404, "token not found");
 
     try {
@@ -193,7 +192,7 @@ const activateUserAccount = async (req, res, next) => {
   }
 };
 
-const updateUserById = async (req, res, next) => {
+const handleUpdateUserById = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const options = { password: 0 };
@@ -221,11 +220,13 @@ const updateUserById = async (req, res, next) => {
 
     //
 
-    for (let key in req.body) {
-      if (["name", "password", "phone", "address"].includes(key)) {
+    const allowedFields = ["name", "password", "phone", "address"];
+
+    for (const key in req.body) {
+      if (allowedFields.includes(key)) {
         updates[key] = req.body[key];
-      } else if (["email"].includes(key)) {
-        throw new Error("Email can not be updated");
+      } else if (key === "email") {
+        throw createError(400, "Email can not be updated");
       }
     }
     //
@@ -325,7 +326,7 @@ const handleUpdatePassword = async (req, res, next) => {
     const isPasswordMatch = await bcryptjs.compare(oldPassword, user.password);
 
     if (!isPasswordMatch) {
-      throw createError(401, "old password  did not correct");
+      throw createError(401, "old password is incorrect");
     }
 
     // const filter = { userId };
@@ -375,9 +376,9 @@ const handleForgetPassword = async (req, res, next) => {
        <p>Please click here to  <a href="${clientURL}/api/users/reset-password/${token}" target="_blank"> Reset your password </a> </p>
       `,
     };
-    // send email with nodemailer
 
     try {
+      // send email with nodemailer
       await emailWithNodeMailer(emailData);
     } catch (emailError) {
       next(createError(500, "Failed to send reset password email"));
@@ -425,12 +426,12 @@ const handleResetPassword = async (req, res, next) => {
   }
 };
 module.exports = {
-  processRegister,
-  activateUserAccount,
-  getUsers,
-  getUserById,
-  deleteUserById,
-  updateUserById,
+  handleGetUsers,
+  handleGetUserById,
+  handleDeleteUserById,
+  handleProcessRegister,
+  handleActivateUserAccount,
+  handleUpdateUserById,
   handleBanUserById,
   handleUnbanUserById,
   handleUpdatePassword,
