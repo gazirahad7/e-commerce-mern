@@ -13,6 +13,8 @@ const {
 const emailWithNodeMailer = require("../helper/email");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
+const checkUserExists = require("../helper/checkUserExists");
+const sendEmail = require("../helper/sendEmail");
 
 const handleGetUsers = async (req, res, next) => {
   try {
@@ -113,7 +115,7 @@ const handleProcessRegister = async (req, res, next) => {
 
     // get image
     const imageBufferString = image.buffer.toString("base64");
-    const userExists = await User.exists({ email: email });
+    const userExists = await checkUserExists(email);
     if (userExists) {
       throw createError(
         409,
@@ -140,12 +142,7 @@ const handleProcessRegister = async (req, res, next) => {
     };
     // send email with nodemailer
 
-    try {
-      await emailWithNodeMailer(emailData);
-    } catch (emailError) {
-      next(createError(500, "Failed to send verification email"));
-    }
-
+    sendEmail(emailData);
     return successResponse(res, {
       statusCode: 200,
       message: `Please go to your ${email} for completing your registration process`,
@@ -154,6 +151,7 @@ const handleProcessRegister = async (req, res, next) => {
     next(error);
   }
 };
+
 const handleActivateUserAccount = async (req, res, next) => {
   try {
     const { token } = req.body;
@@ -377,12 +375,8 @@ const handleForgetPassword = async (req, res, next) => {
       `,
     };
 
-    try {
-      // send email with nodemailer
-      await emailWithNodeMailer(emailData);
-    } catch (emailError) {
-      next(createError(500, "Failed to send reset password email"));
-    }
+    // send email with nodemailer
+    await sendEmail(emailData);
 
     return successResponse(res, {
       statusCode: 200,

@@ -5,6 +5,10 @@ const bcryptjs = require("bcryptjs");
 const { successResponse } = require("./responseController");
 const { createJsonWebToken } = require("../helper/jsonwebtoken");
 const { jwtAccessKey, jwtRefreshKey } = require("../secret");
+const {
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} = require("../helper/cookie");
 
 const handleLogin = async (req, res, next) => {
   try {
@@ -51,21 +55,13 @@ const handleLogin = async (req, res, next) => {
     // access token
 
     const accessToken = createJsonWebToken({ userInfo }, jwtAccessKey, "15m");
-    res.cookie("accessToken", accessToken, {
-      maxAge: 15 * 60 * 1000,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "none",
-    });
+
+    setAccessTokenCookie(res, accessToken);
 
     // refresh token
     const refreshToken = createJsonWebToken({ userInfo }, jwtRefreshKey, "7d");
-    res.cookie("refreshToken", refreshToken, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "none",
-    });
+
+    setRefreshTokenCookie(res, refreshToken);
 
     //TODO: success response
 
@@ -97,25 +93,19 @@ const handleLogout = async (req, res, next) => {
 const handleRefreshToken = async (req, res, next) => {
   try {
     const oldRefreshToken = req.cookies.refreshToken;
-
     const decodedToken = jwt.verify(oldRefreshToken, jwtRefreshKey);
 
     if (!decodedToken) {
       throw createError(400, "Invalid refresh token, Please login again");
     }
-
     // create token
     const accessToken = createJsonWebToken(
       decodedToken.userInfo,
       jwtAccessKey,
       "15m"
     );
-    res.cookie("accessToken", accessToken, {
-      maxAge: 15 * 60 * 1000,
-      httpOnly: true,
-      // secure: true,
-      sameSite: "none",
-    });
+    setAccessTokenCookie(res, accessToken);
+
     return successResponse(res, {
       statusCode: 200,
       message: "New access token is generated  ",
