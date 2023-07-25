@@ -49,5 +49,5 @@
 45. Refactoring controllers and routes
 46. Modularity
 47. Winston logger library
-48.
-49.
+48. Category Model & input validation
+49. Category CRUD Crete category
