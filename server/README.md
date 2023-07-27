@@ -50,4 +50,4 @@
 46. Modularity
 47. Winston logger library
 48. Category Model & input validation
-49. Category CRUD Crete category
+49. Category CRUD Crete category - POST: api/categories

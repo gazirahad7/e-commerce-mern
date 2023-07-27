@@ -15,7 +15,7 @@ const myCustomLevels = {
   },
 };
 const logger = createLogger({
-  level: "info",
+  //level: "info",
   // format: format.json(),
   format: format.combine(
     format.colorize(),
