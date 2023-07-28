@@ -51,3 +51,4 @@
 47. Winston logger library
 48. Category Model & input validation
 49. Category CRUD Crete category - POST: api/categories
+50. Category CRUD Read category & categories - GET: api/categories, api/categories/:slug
