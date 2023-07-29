@@ -54,3 +54,6 @@
 50. Category CRUD Read category & categories - GET: api/categories, api/categories/:slug
 51. Category CRUD Update category - PUT: api/categories/:slug
 52. Category CRUD Delete category - DELETE: api/categories/:slug
+53. Product API - Product Model
+54. Product API - create seed route for testing product
+55. Product API - CRUD
