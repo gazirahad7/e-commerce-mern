@@ -53,3 +53,4 @@
 49. Category CRUD Crete category - POST: api/categories
 50. Category CRUD Read category & categories - GET: api/categories, api/categories/:slug
 51. Category CRUD Update category - PUT: api/categories/:slug
+52. Category CRUD Delete category - DELETE: api/categories/:slug
