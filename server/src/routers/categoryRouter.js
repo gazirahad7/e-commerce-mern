@@ -8,6 +8,7 @@ const {
   handleCreateCategory,
   handleGetCategories,
   handleGetCategory,
+  handleUpdateCategory,
 } = require("../controllers/categoryController");
 const { validateCategory } = require("../validators/category");
 const categoryRouter = express.Router();
@@ -22,5 +23,13 @@ categoryRouter.post(
 );
 categoryRouter.get("/", handleGetCategories);
 categoryRouter.get("/:slug", handleGetCategory);
+categoryRouter.put(
+  "/:slug",
+  validateCategory,
+  runValidation,
+  isLoggedIn,
+  isAdmin,
+  handleUpdateCategory
+);
 
 module.exports = categoryRouter;

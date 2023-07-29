@@ -7,6 +7,7 @@ const {
   createCategory,
   getCategories,
   getCategory,
+  updateCategory,
 } = require("../services/categoryService");
 
 const handleCreateCategory = async (req, res, next) => {
@@ -27,7 +28,7 @@ const handleGetCategories = async (req, res, next) => {
     const categories = await getCategories();
 
     return successResponse(res, {
-      statusCode: 200,
+      statusCode: 201,
       message: "categories fetched    successfully ",
       payload: categories,
     });
@@ -38,12 +39,35 @@ const handleGetCategories = async (req, res, next) => {
 const handleGetCategory = async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const categories = await getCategory(slug);
+    const category = await getCategory(slug);
+
+    if (!category) {
+      throw createError(404, "Category not found");
+    }
 
     return successResponse(res, {
       statusCode: 200,
       message: "category fetched    successfully ",
-      payload: categories,
+      payload: category,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const handleUpdateCategory = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const { slug } = req.params;
+    const updatedCategory = await updateCategory(name, slug);
+
+    if (!updatedCategory) {
+      throw createError(404, "No Category  found with this slug");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "category  updated    successfully ",
+      payload: updatedCategory,
     });
   } catch (error) {
     next(error);
@@ -53,4 +77,5 @@ module.exports = {
   handleCreateCategory,
   handleGetCategories,
   handleGetCategory,
+  handleUpdateCategory,
 };
