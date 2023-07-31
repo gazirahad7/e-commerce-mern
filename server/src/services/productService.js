@@ -31,12 +31,27 @@ const createProduct = async (productData) => {
   });
   return newProduct;
 };
-const getCategories = async () => {
-  return await Product.find({}).select("name slug").lean();
+const getProducts = async (page = 1, limit = 4) => {
+  const products = await Product.find({})
+    .populate("category")
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+  if (!products) {
+    throw createError(404, "no products found");
+  }
+
+  const count = await Product.find({}).countDocuments();
+
+  return {
+    products,
+    count,
+    totalPages: Math.ceil(count / limit),
+    currentPage: page,
+  };
 };
-const getProduct = async (slug) => {
-  return await Product.find({ slug }).select("name slug").lean();
-};
+const getProduct = async () => {};
 const updateProduct = async (name, slug) => {
   const filter = { slug };
   const updates = { $set: { name: name, slug: slugify(name) } };
@@ -53,7 +68,7 @@ const deleteProduct = async (slug) => {
 
 module.exports = {
   createProduct,
-  getCategories,
+  getProducts,
   getProduct,
   updateProduct,
   deleteProduct,

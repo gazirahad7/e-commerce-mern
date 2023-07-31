@@ -57,3 +57,4 @@
 53. Product API - Product Model
 54. Product API - create seed route for testing product
 55. Product API - Create POST: api/products
+56. Product API - Read GET: api/products, GET: api/products/:slug

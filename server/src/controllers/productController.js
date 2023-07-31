@@ -4,7 +4,7 @@ const { findWithId } = require("../services/findItem");
 const slugify = require("slugify");
 
 const Product = require("../models/productModel");
-const { createProduct } = require("../services/productService");
+const { createProduct, getProducts } = require("../services/productService");
 
 const handleCreateProduct = async (req, res, next) => {
   const { name, description, price, quantity, shipping, category } = req.body;
@@ -42,7 +42,34 @@ const handleCreateProduct = async (req, res, next) => {
     next(error);
   }
 };
+const handleGetProducts = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+
+    const productsData = await getProducts(page, limit);
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: " returned all  the  products ",
+      payload: {
+        products: productsData?.products,
+
+        pagination: {
+          totalPages: productsData?.totalPages,
+          currentPage: productsData?.currentPage,
+          previousPage: page - 1,
+          nextPage: page + 1,
+          totalNumberOfProducts: productsData?.count,
+        },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   handleCreateProduct,
+  handleGetProducts,
 };
